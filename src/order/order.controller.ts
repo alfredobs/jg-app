@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
   Controller,
   Post,
@@ -46,6 +45,12 @@ export class OrderController {
     const order = await this.orderService.getProduct(orderID);
     if (!order) throw new NotFoundException('Order does not exist!');
     return res.status(HttpStatus.OK).json(order);
+  }
+
+  @Get('/count/count')
+  @ApiQuery({})
+  async count(@Query() query?: ParsedQs) {
+    return { data: await this.orderService.count(query) };
   }
 
   // Delete Product: /delete?productID=5c9d45e705ea4843c8d0e8f7

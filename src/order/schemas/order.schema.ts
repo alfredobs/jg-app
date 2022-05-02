@@ -1,7 +1,7 @@
-/* eslint-disable prettier/prettier */
 import { Schema } from 'mongoose';
 
 export const OrderSchema = new Schema({
+  _id: String,
   make: String,
   vin: String,
   model: String,

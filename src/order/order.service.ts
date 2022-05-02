@@ -19,6 +19,16 @@ export class OrderService {
     const res = await QueryParser.docByQuery<Order>(this.orderModel, query);
     return res.data as Order[];
   }
+  // Count all orders
+  async count(query: ParsedQs = {}): Promise<number> {
+    const res = await QueryParser.docByQuery<Order>(
+      this.orderModel,
+      query,
+      true,
+    );
+    console.log(res);
+    return res.data as number;
+  }
 
   // Get a single Product
   async getProduct(productID: string): Promise<Order> {
