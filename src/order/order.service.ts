@@ -5,6 +5,8 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Order } from './interfaces/order.interface';
 import { CreateOrderDTO } from './dto/create-order.dto';
+import { QueryParser } from 'src/helper/query-parser.helper';
+import { ParsedQs } from 'qs';
 
 @Injectable()
 export class OrderService {
@@ -13,9 +15,9 @@ export class OrderService {
   ) {}
 
   // Get all products
-  async getOrders(): Promise<Order[]> {
-    const orders = await this.orderModel.find();
-    return orders;
+  async getOrders(query: ParsedQs = {}): Promise<Order[]> {
+    const res = await QueryParser.docByQuery<Order>(this.orderModel, query);
+    return res.data as Order[];
   }
 
   // Get a single Product
@@ -32,7 +34,9 @@ export class OrderService {
 
   // Delete Product
   async deleteOrder(orderID: any): Promise<Order> {
-    const deletedOrder = await this.orderModel.findOneAndDelete(orderID);
+    const deletedOrder = await this.orderModel.findOneAndDelete({
+      _id: orderID,
+    });
     return deletedOrder;
   }
 

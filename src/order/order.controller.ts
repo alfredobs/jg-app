@@ -12,6 +12,8 @@ import {
   Query,
   Put,
 } from '@nestjs/common';
+import { ApiQuery } from '@nestjs/swagger';
+import { ParsedQs } from 'qs';
 import { CreateOrderDTO } from './dto/create-order.dto';
 import { OrderService } from './order.service';
 
@@ -32,9 +34,10 @@ export class OrderController {
   // Get Products /product
   // @Get('/list')
   @Get('/')
-  async getProducts(@Res() res) {
-    const orders = await this.orderService.getOrders();
-    return res.status(HttpStatus.OK).json(orders);
+  @ApiQuery({})
+  async getProducts(@Query() query?: ParsedQs) {
+    const orders = await this.orderService.getOrders(query);
+    return { orders };
   }
 
   // GET single product: /product/5c9d46100e2e5c44c444b2d1

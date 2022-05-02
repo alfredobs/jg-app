@@ -1,0 +1,30 @@
+version: '3.3'
+services:
+  mongo:
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+    restart: always
+    expose:
+      - "27017"
+lbapp:
+    image: dockercloud/haproxy
+    links:
+      - app
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "3000:80"
+app:
+    image: jg-app-backend
+    expose:
+      - "3000"
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    restart: always
+    environment:
+      MONGO_URL: mongo
+volumes:
+  mongo-data: {}
